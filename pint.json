@@ -11,5 +11,8 @@
         "not_operator_with_successor_space": true,
         "single_quote": true,
         "trailing_comma_in_multiline": true
-    }
+    },
+    "exclude": [
+        "tests/GlobalMiddlewareTestCase.php"
+    ]
 }
