@@ -33,7 +33,7 @@ Route::middleware(['auth', 'fingerprint'])->group(function () {
 });
 ```
 
-Or enable it globally for all routes via the `LARAVEL_FINGERPRINT_GLOBAL=true` environment variable (see [Configuration](#configuration)).
+Or enable it globally for all `web` routes via the `LARAVEL_FINGERPRINT_GLOBAL=true` environment variable (see [Configuration](#configuration)).
 
 On the first request, the fingerprint is stored in the session. On subsequent requests, it is compared — if it doesn't match, the session is invalidated and the user is redirected.
 
@@ -52,7 +52,7 @@ Available options in `config/laravel_fingerprint.php`:
 | `enabled` | `LARAVEL_FINGERPRINT_ENABLED` | `true` | Enable or disable the package |
 | `include_ip` | `LARAVEL_FINGERPRINT_INCLUDE_IP` | `false` | Include the client IP in the fingerprint (not recommended for mobile/dynamic IPs) |
 | `redirect_route` | `LARAVEL_FINGERPRINT_REDIRECT_ROUTE` | `login` | Named route to redirect to when the fingerprint doesn't match |
-| `global` | `LARAVEL_FINGERPRINT_GLOBAL` | `false` | Apply the middleware automatically to all HTTP routes |
+| `global` | `LARAVEL_FINGERPRINT_GLOBAL` | `false` | Apply the middleware automatically to all routes in the `web` middleware group |
 
 ## How it works
 

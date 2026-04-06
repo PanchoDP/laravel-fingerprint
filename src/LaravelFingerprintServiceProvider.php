@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Panchodp\LaravelFingerprint;
 
-use Illuminate\Foundation\Http\Kernel;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Panchodp\LaravelFingerprint\Http\Middleware\FingerprintGuard;
@@ -26,7 +25,7 @@ final class LaravelFingerprintServiceProvider extends ServiceProvider
         $router->aliasMiddleware('fingerprint', FingerprintGuard::class);
 
         if (config('laravel_fingerprint.global', false)) {
-            $this->app->make(Kernel::class)->pushMiddleware(FingerprintGuard::class);
+            $router->pushMiddlewareToGroup('web', FingerprintGuard::class);
         }
 
         if ($this->app->runningInConsole()) {

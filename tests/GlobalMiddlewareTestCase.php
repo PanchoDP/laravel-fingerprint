@@ -6,7 +6,7 @@ namespace Panchodp\LaravelFingerprint\Tests;
 
 use Illuminate\Config\Repository;
 
-class GlobalMiddlewareTestCase extends TestCase
+final class GlobalMiddlewareTestCase extends TestCase
 {
     protected function defineEnvironment($app): void
     {
