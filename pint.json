@@ -13,6 +13,6 @@
         "trailing_comma_in_multiline": true
     },
     "exclude": [
-        "tests/GlobalMiddlewareTestCase.php"
+        "tests/Support"
     ]
 }

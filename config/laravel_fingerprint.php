@@ -44,9 +44,10 @@ return [
     | Apply Globally
     |--------------------------------------------------------------------------
     |
-    | When enabled, the fingerprint middleware is applied to all HTTP routes
-    | automatically. When disabled, apply it manually using the 'fingerprint'
-    | middleware alias on the routes or groups you want to protect.
+    | When enabled, the fingerprint middleware is applied to all routes in the
+    | 'web' middleware group automatically. When disabled, apply it manually
+    | using the 'fingerprint' middleware alias on the routes or groups you
+    | want to protect.
     |
     */
 

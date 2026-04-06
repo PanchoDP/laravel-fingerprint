@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Panchodp\LaravelFingerprint\Fingerprint;
 use Panchodp\LaravelFingerprint\Http\Middleware\FingerprintGuard;
-use Panchodp\LaravelFingerprint\Tests\GlobalMiddlewareTestCase;
+use Panchodp\LaravelFingerprint\Tests\Support\GlobalMiddlewareTestCase;
 
 uses(GlobalMiddlewareTestCase::class);
 
