@@ -33,6 +33,7 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: mbstring, dom
           coverage: none
+          tools: composer:2.9.8
 
       - name: Require Laravel version
         run: |
