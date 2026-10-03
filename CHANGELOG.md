@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.2] - 2026-10-03
+
+### ⚙️ Miscellaneous Tasks
+
+- Bump actions/checkout from 5.1.0 to 7.0.1
+**Signed-off-by:** dependabot[bot] <support@github.com>
+
+
 ## [1.0.1] - 2026-10-02
 
 ### 📚 Documentation
