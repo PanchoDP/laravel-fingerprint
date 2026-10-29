@@ -133,3 +133,18 @@ it('logs out session guards and clears the remember cookie when fingerprint does
     expect($guard->guest())->toBeTrue()
         ->and(Cookie::hasQueued($guard->getRecallerName()))->toBeTrue();
 });
+
+it('returns 401 json when fingerprint does not match on a json request', function () use ($server): void {
+    $next = fn () => new Response('OK');
+
+    $request = makeRequest($server);
+    (new FingerprintGuard(new Fingerprint($request)))->handle($request, $next);
+
+    $differentRequest = Request::create('/', 'GET', [], [], [], ['HTTP_USER_AGENT' => 'curl/7.0', 'HTTP_ACCEPT' => 'application/json'] + $server);
+    $differentRequest->setLaravelSession($request->session());
+
+    $response = (new FingerprintGuard(new Fingerprint($differentRequest)))->handle($differentRequest, $next);
+
+    expect($response->getStatusCode())->toBe(401)
+        ->and($response->getContent())->toBe('{"message":"Unauthenticated."}');
+});

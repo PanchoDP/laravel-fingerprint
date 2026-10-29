@@ -6,6 +6,7 @@ namespace Panchodp\LaravelFingerprint\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +40,10 @@ final class FingerprintGuard
         if ($request->session()->get('fingerprint') !== $fingerprint) {
             $this->logoutSessionGuards();
             $request->session()->invalidate();
+
+            if ($request->expectsJson()) {
+                return new JsonResponse(['message' => 'Unauthenticated.'], 401);
+            }
 
             $route = config('laravel_fingerprint.redirect_route', 'login');
             $route = is_string($route) ? $route : 'login';
