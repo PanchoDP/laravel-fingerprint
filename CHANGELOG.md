@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.5] - 2026-10-29
+
+### 🐛 Bug Fixes
+
+- Return 401 JSON response on fingerprint mismatch for JSON requests
+
+
 ## [1.0.4] - 2026-10-29
 
 ### 🐛 Bug Fixes
