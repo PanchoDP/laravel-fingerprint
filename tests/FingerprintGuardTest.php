@@ -2,10 +2,14 @@
 
 declare(strict_types=1);
 
+use Illuminate\Auth\GenericUser;
+use Illuminate\Auth\SessionGuard;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Panchodp\LaravelFingerprint\Fingerprint;
 use Panchodp\LaravelFingerprint\Http\Middleware\FingerprintGuard;
 
@@ -108,4 +112,24 @@ it('redirects when fingerprint does not match with include_ip enabled', function
     $response = (new FingerprintGuard(new Fingerprint($differentRequest)))->handle($differentRequest, $next);
 
     expect($response->getStatusCode())->toBe(302);
+});
+
+it('logs out session guards and clears the remember cookie when fingerprint does not match', function () use ($server): void {
+    $next = fn () => new Response('OK');
+
+    $request = makeRequest($server);
+    (new FingerprintGuard(new Fingerprint($request)))->handle($request, $next);
+
+    $guard = Auth::guard('web');
+    assert($guard instanceof SessionGuard);
+    $guard->setUser(new GenericUser(['id' => 1, 'remember_token' => null]));
+
+    $differentRequest = Request::create('/', 'GET', [], [$guard->getRecallerName() => '1|token|hash'], [], ['HTTP_USER_AGENT' => 'curl/7.0'] + $server);
+    $differentRequest->setLaravelSession($request->session());
+    $guard->setRequest($differentRequest);
+
+    (new FingerprintGuard(new Fingerprint($differentRequest)))->handle($differentRequest, $next);
+
+    expect($guard->guest())->toBeTrue()
+        ->and(Cookie::hasQueued($guard->getRecallerName()))->toBeTrue();
 });

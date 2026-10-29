@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Panchodp\LaravelFingerprint\Http\Middleware;
 
 use Closure;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Panchodp\LaravelFingerprint\Fingerprint;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,6 +37,7 @@ final class FingerprintGuard
         }
 
         if ($request->session()->get('fingerprint') !== $fingerprint) {
+            $this->logoutSessionGuards();
             $request->session()->invalidate();
 
             $route = config('laravel_fingerprint.redirect_route', 'login');
@@ -46,5 +49,30 @@ final class FingerprintGuard
         }
 
         return $next($request);
+    }
+
+    /**
+     * Log out every session-based guard so "remember me" tokens are cycled
+     * and their cookies cleared, preventing automatic re-authentication.
+     */
+    private function logoutSessionGuards(): void
+    {
+        $guards = config('auth.guards', []);
+
+        if (! is_array($guards)) {
+            return;
+        }
+
+        foreach ($guards as $name => $guard) {
+            if (! is_array($guard) || ($guard['driver'] ?? null) !== 'session') {
+                continue;
+            }
+
+            $instance = Auth::guard((string) $name);
+
+            if ($instance instanceof StatefulGuard) {
+                $instance->logout();
+            }
+        }
     }
 }
